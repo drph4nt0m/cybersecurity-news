@@ -16,6 +16,8 @@
     "discord.js": "^12.3.1",
     "dotenv": "^8.2.0",
     "moment": "^2.29.0",
+    "mongoose": "^5.10.6",
+    "node-vibrant": "^3.1.5",
     "rss-parser": "^3.9.0"
   }
 }
