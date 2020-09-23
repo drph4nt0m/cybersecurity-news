@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  nodejs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: cys
+    container_name: cys-rss
+    restart: unless-stopped
+    env_file: .env
+    command: node bot.js
