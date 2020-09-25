@@ -116,7 +116,7 @@ async function sendMessages() {
 
   let msgs = []
   for (let i = 0; i < feedDetails.length; i++) {
-    logger.info(`[${moment.utc().toDate()}]: (${i + 1}/${feedDetails.length}) ${feedDetails[i].title}`);
+    logger.info(`(${i + 1}/${feedDetails.length}) ${feedDetails[i].title}`);
     msgs.push(...await getFeed(feedDetails[i]));
   }
 
@@ -163,7 +163,6 @@ async function getFeed(feedDetails) {
     logger.info(`${pubDate.isAfter(rssLast[feedDetails.title])} ${title}`);
 
     if (pubDate.isAfter(rssLast[feedDetails.title])) {
-      logger.info(pubDate);
       rssLast[feedDetails.title] = pubDate;
       const msgEmbed = new MessageEmbed()
         .setAuthor(feedDetails.title, null, feedDetails.home)
