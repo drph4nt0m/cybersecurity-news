@@ -23,9 +23,9 @@ client.on('ready', async () => {
   await initializeMongo();
 
   sendMessages();
-  // setInterval(() => {
-  //   sendMessages(targetChannel);
-  // }, 300000);
+  setInterval(() => {
+    sendMessages();
+  }, 300000);
 });
 
 client.on('guildCreate', async (guild) => {
