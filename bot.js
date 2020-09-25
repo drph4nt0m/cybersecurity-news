@@ -9,14 +9,16 @@ var Vibrant = require('node-vibrant')
 const parser = new(require('rss-parser'))();
 
 require('dotenv').config();
+
 const feedDetails = require('./feeds');
+const logger = require('./logger');
 
 const client = new Client();
 const rssLast = {};
 let Guild = null;
 
 client.on('ready', async () => {
-  console.log(`Logged in as ${client.user.tag}!`);
+  logger.info(`Logged in as ${client.user.tag}!`);
 
   await initializeMongo();
 
@@ -60,7 +62,7 @@ client.on('message', async (msg) => {
       })
       return msg.reply(`Feed channel changed to ${channel}`);
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       return;
     }
   }
@@ -77,7 +79,7 @@ async function initializeMongo() {
       useFindAndModify: false,
       useCreateIndex: true
     });
-    console.log('MongoDB connected!');
+    logger.info('MongoDB connected!');
 
     const GuildSchema = new mongoose.Schema({
       guildId: {
@@ -98,7 +100,7 @@ async function initializeMongo() {
     Guild = mongoose.model('Guild', GuildSchema);
 
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     process.exit(0);
   }
 }
@@ -114,7 +116,7 @@ async function sendMessages() {
 
   let msgs = []
   for (let i = 0; i < feedDetails.length; i++) {
-    console.log(`[${moment.utc().toDate()}]: (${i + 1}/${feedDetails.length}) ${feedDetails[i].title}`);
+    logger.info(`[${moment.utc().toDate()}]: (${i + 1}/${feedDetails.length}) ${feedDetails[i].title}`);
     msgs.push(...await getFeed(feedDetails[i]));
   }
 
@@ -124,14 +126,14 @@ async function sendMessages() {
     msgs.forEach(msgEmbed => channel.send(msgEmbed));
   })
 
-  console.log('====='.repeat(10));
+  logger.info('====='.repeat(10));
 
 }
 
 async function getFeed(feedDetails) {
-  const today = moment.utc().startOf('day');
+  const today = moment.utc().startOf('day').subtract(1, 'days');
   const feed = (await parser.parseURL(feedDetails.rss));
-  const f = feed.items.filter(item => moment(item.isoDate).utc().isSame(today, 'day')).reverse();
+  const f = feed.items;
 
   const msgs = [];
 
@@ -139,7 +141,6 @@ async function getFeed(feedDetails) {
   let color = null;
 
   if (logo && logo.title !== 'Some Rights Reserved') {
-    console.log(logo);
     const v = await Vibrant.from(logo.url).getPalette();
     if (v.Vibrant) {
       color = v.Vibrant.hex;
@@ -152,13 +153,17 @@ async function getFeed(feedDetails) {
     const link = f[i].link.trim();
     const author = (f[i].creator ? f[i].creator : f[i].author ? f[i].author : feedDetails.title).trim();
     const content = (f[i].contentSnippet ? f[i].contentSnippet.length < 1000 ? f[i].contentSnippet : `${f[i].contentSnippet.split(' ').slice(0, 200).join(' ')}...` : '').trim();
-    const pubDate = moment(f[i].isoDate ? f[i].isoDate : f[i].pubDate).utc();
+    let pubDate = moment(f[i].isoDate ? f[i].isoDate : f[i].pubDate).utc();
 
     if (!rssLast[feedDetails.title]) {
       rssLast[feedDetails.title] = today;
     }
+    pubDate = moment(f[i].isoDate ? f[i].isoDate : f[i].pubDate).utc();
+
+    logger.info(`${pubDate.isAfter(rssLast[feedDetails.title])} ${title}`);
 
     if (pubDate.isAfter(rssLast[feedDetails.title])) {
+      logger.info(pubDate);
       rssLast[feedDetails.title] = pubDate;
       const msgEmbed = new MessageEmbed()
         .setAuthor(feedDetails.title, null, feedDetails.home)
