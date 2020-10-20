@@ -137,5 +137,10 @@ module.exports = [{
     title: 'Hacker Combat',
     home: 'https://hackercombat.com',
     rss: 'https://hackercombat.com/feed/'
+  },
+  {
+    title: 'The Daily Swig',
+    home: 'https://portswigger.net/daily-swig',
+    rss: 'https://portswigger.net/daily-swig/rss'
   }
 ]
