@@ -6,18 +6,16 @@ const moment = require('moment');
 const mongoose = require('mongoose');
 var Vibrant = require('node-vibrant')
 
-const puppeteer = require('puppeteer');
 const parser = new(require('rss-parser'))();
 
 require('dotenv').config();
 
 const feedDetails = require('./feeds');
-const tweetDetails = require('./tweets');
+
 const logger = require('./logger');
 
 const client = new Client();
 const rssLast = {};
-const tweetLast = {};
 let Guild = null;
 
 client.on('ready', async () => {
@@ -126,11 +124,6 @@ async function sendMessages() {
 
   msgs = msgs.sort((a, b) => a.timestamp - b.timestamp);
 
-  for (let i = 0; i < tweetDetails.length; i++) {
-    logger.info(`[tweet] (${i + 1}/${tweetDetails.length}) ${tweetDetails[i].title}`);
-    msgs.push(...await getTweet(tweetDetails[i]));
-  }
-
   feedChannels.forEach(async channel => {
     try {
       msgs.forEach(msgEmbed => channel.send(msgEmbed).catch(err => {}));
@@ -166,14 +159,16 @@ async function getFeed(feedDetails) {
     const content = (f[i].contentSnippet ? f[i].contentSnippet.length < 1000 ? f[i].contentSnippet : `${f[i].contentSnippet.split(' ').slice(0, 200).join(' ')}...` : '').trim();
     let pubDate = moment(f[i].isoDate ? f[i].isoDate : f[i].pubDate).utc();
 
+
     if (!rssLast[feedDetails.title]) {
       rssLast[feedDetails.title] = today;
     }
     pubDate = moment(f[i].isoDate ? f[i].isoDate : f[i].pubDate).utc();
 
-    logger.info(`${pubDate.isAfter(rssLast[feedDetails.title])} ${title}`);
 
     if (pubDate.isAfter(rssLast[feedDetails.title])) {
+      logger.info(`${pubDate.isAfter(rssLast[feedDetails.title])} | ${title}`);
+
       rssLast[feedDetails.title] = pubDate;
       const msgEmbed = new MessageEmbed()
         .setAuthor(feedDetails.title, null, feedDetails.home)
@@ -196,54 +191,5 @@ async function getFeed(feedDetails) {
       msgs.push(msgEmbed)
     }
   }
-  return msgs;
-}
-
-async function getTweet(tweetDetails) {
-  const msgs = [];
-
-  const browser = await puppeteer.launch({
-    headless: true
-  });
-  const page = await browser.newPage();
-  await page.goto(tweetDetails.profile);
-
-  await page.waitForSelector('div[lang="en"]');
-  const tweetEls = await page.$$('div[lang="en"]');
-
-  const tweets = [];
-  for (let i = 0; i < tweetEls.length; i++) {
-    const tweetEl = tweetEls[i];
-    const content = await tweetEl.$eval('span', (element) => {
-      return element.innerHTML
-    });
-    const link = await tweetEl.$eval('a', (element) => {
-      return element.title
-    });
-
-    if (tweetLast[tweetDetails.title] == link) break;
-
-    logger.info(`true ${link}`);
-
-    let color = null;
-    const v = await Vibrant.from(tweetDetails.logo).getPalette();
-    if (v.Vibrant) {
-      color = v.Vibrant.hex;
-    }
-
-    const msgEmbed = new MessageEmbed()
-      .setTitle(tweetDetails.title)
-      .setURL(link)
-      .setThumbnail(tweetDetails.logo)
-      .setDescription(content)
-      .setFooter(tweetDetails.title)
-      .setTimestamp();
-
-    tweets.push(link);
-    msgs.push(msgEmbed);
-  }
-
-  tweetLast[tweetDetails.title] = tweets[tweets.length - 1];
-
   return msgs;
 }
