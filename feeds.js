@@ -172,5 +172,10 @@ module.exports = [{
     title: 'Exploit-DB',
     home: 'https://www.exploit-db.com/',
     rss: 'https://www.exploit-db.com/rss.xml'
+  },
+  {
+    title: 'CISA',
+    home: 'https://us-cert.cisa.gov/ncas',
+    rss: 'https://us-cert.cisa.gov/ncas/all.xml'
   }
 ]
