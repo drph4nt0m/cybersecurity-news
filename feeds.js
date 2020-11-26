@@ -139,6 +139,12 @@ module.exports = [{
     rss: 'https://hackercombat.com/feed/'
   },
   {
+    title: 'Heimdal Security Blog',
+    home: 'https://heimdalsecurity.com/blog',
+    rss: 'https://heimdalsecurity.com/blog/feed/'
+  },
+  },
+  {
     title: 'The Daily Swig',
     home: 'https://portswigger.net/daily-swig',
     rss: 'https://portswigger.net/daily-swig/rss'
