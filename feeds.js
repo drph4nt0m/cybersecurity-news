@@ -167,5 +167,10 @@ module.exports = [{
     title: 'ZDI: Blog',
     home: 'https://www.zerodayinitiative.com/blog/',
     rss: 'https://www.zerodayinitiative.com/blog/?format=rss'
+  },
+  {
+    title: 'Exploit-DB',
+    home: 'https://www.exploit-db.com/',
+    rss: 'https://www.exploit-db.com/rss.xml'
   }
 ]
