@@ -152,5 +152,20 @@ module.exports = [{
     title: 'NIST',
     home: 'https://www.nist.gov/blogs/cybersecurity-insights',
     rss: 'https://www.nist.gov/blogs/cybersecurity-insights/rss.xml'
+  },
+  {
+    title: 'ZDI: Upcoming Advisories',
+    home: 'https://www.zerodayinitiative.com',
+    rss: 'https://www.zerodayinitiative.com/rss/upcoming/'
+  },
+  {
+    title: 'ZDI: Published Advisories',
+    home: 'https://www.zerodayinitiative.com',
+    rss: 'https://www.zerodayinitiative.com/rss/published/'
+  },
+  {
+    title: 'ZDI: Blog',
+    home: 'https://www.zerodayinitiative.com/blog/',
+    rss: 'https://www.zerodayinitiative.com/blog/?format=rss'
   }
 ]
