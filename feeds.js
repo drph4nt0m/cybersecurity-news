@@ -147,5 +147,10 @@ module.exports = [{
     title: 'The Daily Swig',
     home: 'https://portswigger.net/daily-swig',
     rss: 'https://portswigger.net/daily-swig/rss'
+  },
+  {
+    title: 'NIST',
+    home: 'https://www.nist.gov/blogs/cybersecurity-insights',
+    rss: 'https://www.nist.gov/blogs/cybersecurity-insights/rss.xml'
   }
 ]
