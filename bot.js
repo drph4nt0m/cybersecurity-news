@@ -118,10 +118,11 @@ async function sendMessages() {
   const feedChannels = await client.channels.cache.filter(c => fc.indexOf(c.id) !== -1);
 
   let msgs = []
-  // for (let i = 0; i < feedDetails.length; i++) {
-  //   logger.info(`[rss] (${i + 1}/${feedDetails.length}) ${feedDetails[i].title}`);
-  //   msgs.push(...await getFeed(feedDetails[i]));
-  // }
+
+  for (let i = 0; i < feedDetails.length; i++) {
+    logger.info(`[rss] (${i + 1}/${feedDetails.length}) ${feedDetails[i].title}`);
+    msgs.push(...await getFeed(feedDetails[i]));
+  }
 
   msgs = msgs.sort((a, b) => a.timestamp - b.timestamp);
 

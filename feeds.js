@@ -143,7 +143,6 @@ module.exports = [{
     home: 'https://heimdalsecurity.com/blog',
     rss: 'https://heimdalsecurity.com/blog/feed/'
   },
-  },
   {
     title: 'The Daily Swig',
     home: 'https://portswigger.net/daily-swig',
