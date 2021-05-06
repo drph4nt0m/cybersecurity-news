@@ -177,5 +177,10 @@ module.exports = [{
     title: 'CISA',
     home: 'https://us-cert.cisa.gov/ncas',
     rss: 'https://us-cert.cisa.gov/ncas/all.xml'
+  },
+  {
+    title: 'FireEye Blogs',
+    home: 'https://www.fireeye.com/blog.html',
+    rss: 'https://www.fireeye.com/blog/feed'
   }
 ]
