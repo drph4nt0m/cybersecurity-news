@@ -151,21 +151,20 @@ async function getFeed(feedDetails) {
     }
   }
 
-  console.log(rssLast);
-
   for (let i = 0; i < f.length; i++) {
 
     let title = '';
+
     if(f[i].creator === 'US-CERT') {
       title = f[i].title['a'][0]['_'].trim();
     } else {
       title = f[i].title.trim();
     }
+
     const link = f[i].link.trim();
     const author = (f[i].creator ? f[i].creator : f[i].author ? f[i].author : feedDetails.title).trim();
     const content = (f[i].contentSnippet ? f[i].contentSnippet.length < 1000 ? f[i].contentSnippet : `${f[i].contentSnippet.split(' ').slice(0, 200).join(' ')}...` : '').trim();
     let pubDate = moment(f[i].isoDate ? f[i].isoDate : f[i].pubDate).utc();
-
 
     if (!rssLast[feedDetails.title]) {
       rssLast[feedDetails.title] = today;
@@ -178,7 +177,6 @@ async function getFeed(feedDetails) {
     pubDate = moment(f[i].isoDate ? f[i].isoDate : f[i].pubDate).utc();
 
     if (pubDate.isAfter(rssLast[feedDetails.title])) {
-      console.log(pubDate);
       logger.info(`${pubDate.isAfter(rssLast[feedDetails.title])} | ${title}`);
 
       rssLast[feedDetails.title] = pubDate;
