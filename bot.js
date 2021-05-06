@@ -26,7 +26,7 @@ client.on('ready', async () => {
   sendMessages();
   setInterval(() => {
     sendMessages();
-  }, 1000 * 10 * 1);
+  }, 1000 * 60 * 5);
 });
 
 client.on('guildCreate', async (guild) => {
