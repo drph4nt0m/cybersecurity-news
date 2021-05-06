@@ -26,7 +26,7 @@ client.on('ready', async () => {
   sendMessages();
   setInterval(() => {
     sendMessages();
-  }, 300000);
+  }, 1000 * 10 * 1);
 });
 
 client.on('guildCreate', async (guild) => {
@@ -151,6 +151,8 @@ async function getFeed(feedDetails) {
     }
   }
 
+  console.log(rssLast);
+
   for (let i = 0; i < f.length; i++) {
 
     let title = '';
@@ -168,10 +170,15 @@ async function getFeed(feedDetails) {
     if (!rssLast[feedDetails.title]) {
       rssLast[feedDetails.title] = today;
     }
+
+    if (!f[i].isoDate) {
+      continue;
+    }
+
     pubDate = moment(f[i].isoDate ? f[i].isoDate : f[i].pubDate).utc();
 
-
     if (pubDate.isAfter(rssLast[feedDetails.title])) {
+      console.log(pubDate);
       logger.info(`${pubDate.isAfter(rssLast[feedDetails.title])} | ${title}`);
 
       rssLast[feedDetails.title] = pubDate;
